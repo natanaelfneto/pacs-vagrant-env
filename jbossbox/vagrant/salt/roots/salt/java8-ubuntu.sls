@@ -2,19 +2,11 @@
 
 add-java-ppa:
   cmd.run:
-    - name: echo -e "\n" | add-apt-repository ppa:openjdk-r/ppa && apt-get update
+    - name: echo -e "\n" | add-apt-repository ppa:webupd8team/java && apt-get update
     - user: root
-
-jre8:
-  cmd.run:
-    - name: apt-get -y openjdk-8-jre
-    - user: root
-    - cwd: /tmp
-    - unless: command -v java | grep "bin/java"
 
 jdk8:
   cmd.run:
-    - name: apt-get update && apt-get -y install openjdk-8-jdk-headless
+    - name: apt-get install -y oracle-java8-installer && apt-get update
     - user: root
-    - cwd: /tmp
     - unless: command -v java | grep "bin/java"

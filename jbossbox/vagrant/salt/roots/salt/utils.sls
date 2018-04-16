@@ -4,19 +4,19 @@
 
 htop:
   pkg:
-    - installed
+    - htop
 
 vim:
   pkg:
-    - installed
+    - vim
 
 nano:
   pkg:
-    - installed
+    - nano
 
 git:
   pkg:
-    - installed
+    - git
 
 w3m:
   pkg:
