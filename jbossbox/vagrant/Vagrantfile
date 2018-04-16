@@ -1,39 +1,45 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+
 Vagrant.configure("2") do |config|
-  config.vm.box = "centos7"
-	#url for base box first install
-  config.vm.box_url = "https://github.com/tommy-muehle/puppet-vagrant-boxes/releases/download/1.1.0/centos-7.0-x86_64.box"
+  config.vm.box = "ubuntu/xenial64"
+
+	# Configuration for proxy environment
+	if Vagrant.has_plugin?("vagrant-proxyconf")
+		config.proxy.http     = "http://huol-vp-proxy-wifi.ebserhnet.ebserh.gov.br:3128"
+		config.proxy.https    = "https://huol-vp-proxy-wifi.ebserhnet.ebserh.gov.br:3128"
+		config.proxy.no_proxy = "localhost,127.0.0.1,10.*"
+	end
+
 	# Configuration  for salt
   config.vm.provision :salt do |salt|
-    salt.minion_config = "salt/minion"
-    salt.run_highstate = true
-    salt.verbose = true
+    salt.minion_config 	= "salt/minion"
+		salt.run_highstate 	= true
+		salt.log_level 			= "all"
+    salt.verbose 				= true
   end
+
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--memory", "512"]
   end
-	config.vm.network :private_network, ip: "192.168.68.111" #private IP
-  config.vm.network :public_network, ip: "192.168.68.112" #public IP
+
+	config.vm.network :private_network, ip: "192.168.68.8" #private IP
+
 	# forwarding common used ports
 	config.vm.network "forwarded_port", guest: 80, host: 10080, auto_correct: true
 	config.vm.network "forwarded_port", guest: 8000, host: 18000, auto_correct: true
-	config.vm.network "forwarded_port", guest: 8080, host: 18080, auto_correct: true
-	config.vm.network "forwarded_port", guest: 8888, host: 18080, auto_correct: true
-	# forwarding extra ports if needed
-  config.vm.network "forwarded_port", guest: 90, host: 10090, auto_correct: true
-	config.vm.network "forwarded_port", guest: 9000, host: 19000, auto_correct: true
-	config.vm.network "forwarded_port", guest: 9090, host: 19090, auto_correct: true
-	config.vm.network "forwarded_port", guest: 9999, host: 19999, auto_correct: true
+	
 	#forwarding JBOSS common used ports
-	config.vm.network "forwarded_port", guest: 9994, host: 19994 # JBOSS Admin Console
-	config.vm.network "forwarded_port", guest: 8084, host: 18084 # JBOSS Endpoints
-	config.vm.network "forwarded_port", guest: 10003, host: 10003 # JBOSS Maven Deploy
-	config.vm.network "forwarded_port", guest: 9443, host: 19443 # WSO2 Console admin/admin
-	config.vm.network "forwarded_port", guest: 8243, host: 18243 # WSO2 Endpoints
-	config.vm.network "forwarded_port", guest: 8280, host: 18280 # WSO2 Endpoints
-	config.vm.network "forwarded_port", guest: 1521, host: 11521 # Oracle XE
+	#config.vm.network "forwarded_port", guest: 9994, host: 19994 # JBOSS Admin Console
+	#config.vm.network "forwarded_port", guest: 8084, host: 18084 # JBOSS Endpoints
+	#config.vm.network "forwarded_port", guest: 10003, host: 10003 # JBOSS Maven Deploy
+	#config.vm.network "forwarded_port", guest: 9443, host: 19443 # WSO2 Console admin/admin
+	#config.vm.network "forwarded_port", guest: 8243, host: 18243 # WSO2 Endpoints
+	#config.vm.network "forwarded_port", guest: 8280, host: 18280 # WSO2 Endpoints
+	#config.vm.network "forwarded_port", guest: 1521, host: 11521 # Oracle XE
+
 	# configure shared folders
 	config.vm.synced_folder "salt/roots/", "/srv/"
   config.vm.synced_folder "shared/", "/home/vagrant/shared/"
+	
 end

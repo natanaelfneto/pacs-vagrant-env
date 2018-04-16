@@ -3,7 +3,6 @@
 base:
   '*':
     - utils
+    - java8-ubuntu
     - jboss
-    - nginx
-    - postgresql
     - dcm4chee
