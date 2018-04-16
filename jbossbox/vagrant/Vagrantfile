@@ -2,7 +2,10 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/xenial64"
+	config.vm.box = "ubuntu/xenial64"
+	
+	config.install_type = "git"
+	config.install_args = "develop"
 
 	# Configuration for proxy environment
 	if Vagrant.has_plugin?("vagrant-proxyconf")
