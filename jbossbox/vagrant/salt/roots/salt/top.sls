@@ -2,7 +2,7 @@
 # If its not in this list, it will not run on provision
 base:
   '*':
-    - utils
+    # - utils
     # - java8-ubuntu
     # - jboss
     # - dcm4chee
