@@ -3,6 +3,6 @@
 base:
   '*':
     - utils
-    - java8-ubuntu
-    - jboss
-    - dcm4chee
+    # - java8-ubuntu
+    # - jboss
+    # - dcm4chee
