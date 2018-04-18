@@ -1,17 +1,25 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+p "Vagrantfile load begin..."
 Vagrant.configure("2") do |config|
-	config.vm.box = "ubuntu/xenial64"
 
-	#config.ssh.username = "vagrant"
-	#config.ssh.password = "vagrant"
+	config.vm.box = "ubuntu/xenial64"
+	p "Vagrant base box: " << config.vm.box
+
+	# config.ssh.username = "vagrant"
+	# config.ssh.password = "vagrant"
+	# p "Vagrant username/password: " << config.ssh.username << "/" << config.ssh.password
 	
-	#config.ssh.insert_key = false
-	#config.ssh.compression = false
+	# config.ssh.insert_key = false
+	# p "Vagrant ssh insert_key: " << config.ssh.insert_key
+
+	# config.ssh.compression = false
+	# p "Vagrant ssh compression: " << config.ssh.compression
 
 	# setting up private ip
 	config.vm.network :private_network, ip: "192.168.68.8" #private IP
+	p "Vagrant private network IP address: " << config.vm.network
 
 	# forwarding common used ports
 	config.vm.network "forwarded_port", guest: 80, host: 2281, auto_correct: true
@@ -36,5 +44,5 @@ Vagrant.configure("2") do |config|
 		)
 
 	#vagrant ALL=(ALL) NOPASSWD: ALL
-	print "end of vagrantfile"
+	print "Vagrantfile loaded\n"
 end
