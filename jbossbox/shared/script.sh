@@ -139,7 +139,7 @@ if [ -d "$PACS_DIR" ]; then
                     if [ -f "$PACS_DIR/jboss-4.2.3.GA/jboss_install.config" ]; then
                         # check if PostgreSQL is running
                         echo "check if PostgreSQL is running...";
-                        if [ netstat -plntu | grep "postgres" ]; then
+                        if [ sudo netstat -plntu | grep "postgres" ]; then
                             echo "PostgreSQL is runnig normally";
                         else
                             echo "installing PostgreSQL...";
@@ -153,7 +153,7 @@ if [ -d "$PACS_DIR" ]; then
                             echo "...OK";
                             # re-check if PostgreSQL is running
                             echo "check if PostgreSQL is NOW running...";
-                            if [ netstat -plntu | grep "postgres" ]; then
+                            if [ sudo netstat -plntu | grep "postgres" ]; then
                                 echo "something is wrong with Postgres installation...";
                                 break; exit;
                             fi;
@@ -161,11 +161,12 @@ if [ -d "$PACS_DIR" ]; then
                         # check if postgres password is set
                         echo "check if postgres password is set..."
                         if [ ! -f "$PACS_DIR/psql_passwd.config" ]; then
-                            echo "postgres password is not set, fixing it..."
-                            # echo "pgadminpacs" | passwd postgres;
-                            # su - postgres;
-                            # psql -d template1 -c "ALTER USER postgres WITH PASSWORD 'pgadminpacs';"
-                            # exit;
+                            echo "postgres password is not set, fixing it...";
+                            echo -e "pgadminpacs\npgadminpacs" | sudo passwd postgres;
+                            sudo su;
+                            su - postgres;
+                            psql -d template1 -c "ALTER USER postgres WITH PASSWORD 'pgadminpacs';";
+                            exit;
                             # touch "$PACS_DIR/psql_passwd.config";
                             echo "...OK";
                         else echo "...OK";
