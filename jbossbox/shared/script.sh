@@ -133,24 +133,23 @@ fi; # end of pacs dir check
 # check if all previous steps are ok
 if [ -d "$PACS_DIR" ]; then
     if [ `command -v javac` ]; then
-        if [ ! -d "$PACS_DIR/dcm4chee-2.18.1-psql" ]; then
-            if [ ! -d "$PACS_DIR/jboss-4.2.3.GA" ]; then
-                if [ ! -f "$PACS_DIR/jboss-4.2.3.GA/libclib_jiio.so.config" ]; then
-                    if [ ! -f "$PACS_DIR/jboss-4.2.3.GA/jboss_install.config" ]; then
+        if [ -d "$PACS_DIR/dcm4chee-2.18.1-psql" ]; then
+            if [ -d "$PACS_DIR/jboss-4.2.3.GA" ]; then
+                if [ -f "$PACS_DIR/jboss-4.2.3.GA/libclib_jiio.so.config" ]; then
+                    if [ -f "$PACS_DIR/jboss-4.2.3.GA/jboss_install.config" ]; then
                         # check if PostgreSQL is running
                         echo "check if PostgreSQL is running...";
                         if [ netstat -plntu | grep "postgres" ]; then
                             echo "PostgreSQL is runnig normally";
                         else
                             echo "installing PostgreSQL...";
-                            sudo apt-get install postgresql;
-                            sudo apt-get install postgresql-contrib;
+                            sudo apt-get install -y postgresql;
+                            sudo apt-get install -y postgresql-contrib;
                             echo "...OK";
                             # starting database and service
                             echo "Initialize Postgres database and start SQL...";
-                            postgresql-setup initdb;
-                            systemctl start postgresql;
-                            systemctl enable postgresql;
+                            sudo systemctl start postgresql;
+                            sudo systemctl enable postgresql;
                             echo "...OK";
                             # re-check if PostgreSQL is running
                             echo "check if PostgreSQL is NOW running...";
@@ -163,20 +162,35 @@ if [ -d "$PACS_DIR" ]; then
                         echo "check if postgres password is set..."
                         if [ ! -f "$PACS_DIR/psql_passwd.config" ]; then
                             echo "postgres password is not set, fixing it..."
-                            echo "pgadminpacs" | passwd postgres;
-                            su - postgres;
-                            psql -d template1 -c "ALTER USER postgres WITH PASSWORD 'pgadminpacs';"
-                            exit;
-                            touch "$PACS_DIR/psql_passwd.config";
+                            # echo "pgadminpacs" | passwd postgres;
+                            # su - postgres;
+                            # psql -d template1 -c "ALTER USER postgres WITH PASSWORD 'pgadminpacs';"
+                            # exit;
+                            # touch "$PACS_DIR/psql_passwd.config";
                             echo "...OK";
                         else echo "...OK";
                         fi;
+                        # check if postgres password is set
+                        echo "check if postgres password is set..."
+                        if [ ! -f "$PACS_DIR/dcm_psql.config" ]; then
+                            
+                            touch "$PACS_DIR/dcm_psql.config";
+                            echo "...OK";
+                            else echo "...OK";
+                        fi;
+                        echo "...a";
                     fi;
+                    echo "...b";
                 fi;
+                echo "...c";
             fi;
+            echo "...d";
         fi;
+        echo "...e";
     fi;
+    echo "...f";
 fi;
+echo "...g";
 
 
                     
