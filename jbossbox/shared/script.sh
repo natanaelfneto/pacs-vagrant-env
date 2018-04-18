@@ -85,7 +85,7 @@ if [ ! -d "$PACS_DIR" ]; then
     echo "something prevent PACS folder from being created"; break; exit;
 fi;
 
-if [ ! -d "$PACS_DIR" ]; then
+if [ -d "$PACS_DIR" ]; then
     if [ `command -v javac` ]; then
         # check if dcm4chee is properly located
         echo "check if dcm4chee is properly located..."    
