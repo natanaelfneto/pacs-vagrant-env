@@ -15,6 +15,7 @@ if [ ! -f "/vagrant/pacs/firt_time_run" ]; then
     sudo apt-get -y upgrade;
     touch "/vagrant/pacs/firt_time_run";
     echo "...OK"
+else echo "...OK";
 fi;
 
 # installing debug requirements
@@ -78,7 +79,7 @@ fi;
 
 # check if PACS folder exists
 if [ ! -d "$PACS_DIR" ]; then
-    printf "creating folder for pacs at: %s" $PACS_DIR
+    printf "creating folder for pacs at: %s" $PACS_DIR;
     mkdir $PACS_DIR;
 fi;
 if [ ! -d "$PACS_DIR" ]; then
@@ -88,35 +89,39 @@ fi;
 if [ -d "$PACS_DIR" ]; then
     if [ `command -v javac` ]; then
         # check if dcm4chee is properly located
-        echo "check if dcm4chee is properly located..."    
+        echo "check if dcm4chee is properly located...";
         if [ ! -d "$PACS_DIR/dcm4chee-2.18.1-psql" ]; then
             echo "dcm4chee 2.18.1 PostgreSQL not found, fixing it...";
             unzip $DCM_ZIP -d $PACS_DIR;
             echo "...OK";
+        else echo "...OK";
         fi;
         # check if jboss is properly located
-        echo "check if jboss is properly located..."
+        echo "check if jboss is properly located...";
         if [ ! -d "$PACS_DIR/jboss-4.2.3.GA" ]; then
             echo "JBOSS 4.2.3 GA not found, fixing it...";
             unzip $JBOSS_ZIP -d $PACS_DIR;
             echo "...OK";
+        else echo "...OK";
         fi;
         # check if libclib_jiio.so file is properly located
-        echo "check if libclib_jiio.so file is properly located..."
+        echo "check if libclib_jiio.so file is properly located...";
         if [ ! -f "$PACS_DIR/jboss-4.2.3.GA/libclib_jiio.so.config" ]; then
             echo "JBOSS 4.2.3 GA libclib_jiio.so file replacement not found, fixing it...";
             sudo rm "$PACS_DIR/dcm4chee-2.18.1-psql/bin/native/libclib_jiio.so";
             sudo cp "$LIB_FILE" "$PACS_DIR/dcm4chee-2.18.1-psql/bin/native/libclib_jiio.so";
             sudo touch "$PACS_DIR/jboss-4.2.3.GA/libclib_jiio.so.config";
             echo "...OK";
+        else echo "...OK";
         fi;
         # check if JBOSS is installed
-        echo "check if JBOSS is installed..."
+        echo "check if JBOSS is installed...";
         if [ ! -f "$PACS_DIR/jboss-4.2.3.GA/jboss_install.config" ]; then
             echo "JBOSS 4.2.3 GA installation not found, fixing it...";
-            sudo sh "$PACS_DIR/dcm4chee-2.18.1-psql/bin/install_jboss.sh" "$PACS_DIR/jboss-4.2.3.GA"
+            sudo sh "$PACS_DIR/dcm4chee-2.18.1-psql/bin/install_jboss.sh" "$PACS_DIR/jboss-4.2.3.GA";
             sudo touch "$PACS_DIR/jboss-4.2.3.GA/jboss_install.config";
             echo "...OK";
+        else echo "...OK";
         fi;
     else
         printf "could not find java!\n";
@@ -124,6 +129,57 @@ if [ -d "$PACS_DIR" ]; then
 else
     printf "could not find pacs dir!\n";
 fi; # end of pacs dir check
+
+# check if all previous steps are ok
+if [ -d "$PACS_DIR" ]; then
+    if [ `command -v javac` ]; then
+        if [ ! -d "$PACS_DIR/dcm4chee-2.18.1-psql" ]; then
+            if [ ! -d "$PACS_DIR/jboss-4.2.3.GA" ]; then
+                if [ ! -f "$PACS_DIR/jboss-4.2.3.GA/libclib_jiio.so.config" ]; then
+                    if [ ! -f "$PACS_DIR/jboss-4.2.3.GA/jboss_install.config" ]; then
+                        # check if PostgreSQL is running
+                        echo "check if PostgreSQL is running...";
+                        if [ netstat -plntu | grep "postgres" ]; then
+                            echo "PostgreSQL is runnig normally";
+                        else
+                            echo "installing PostgreSQL...";
+                            sudo apt-get install postgresql;
+                            sudo apt-get install postgresql-contrib;
+                            echo "...OK";
+                            # starting database and service
+                            echo "Initialize Postgres database and start SQL...";
+                            postgresql-setup initdb;
+                            systemctl start postgresql;
+                            systemctl enable postgresql;
+                            echo "...OK";
+                            # re-check if PostgreSQL is running
+                            echo "check if PostgreSQL is NOW running...";
+                            if [ netstat -plntu | grep "postgres" ]; then
+                                echo "something is wrong with Postgres installation...";
+                                break; exit;
+                            fi;
+                        fi;
+                        # check if postgres password is set
+                        echo "check if postgres password is set..."
+                        if [ ! -f "$PACS_DIR/psql_passwd.config" ]; then
+                            echo "postgres password is not set, fixing it..."
+                            echo "pgadminpacs" | passwd postgres;
+                            su - postgres;
+                            psql -d template1 -c "ALTER USER postgres WITH PASSWORD 'pgadminpacs';"
+                            exit;
+                            touch "$PACS_DIR/psql_passwd.config";
+                            echo "...OK";
+                        else echo "...OK";
+                        fi;
+                    fi;
+                fi;
+            fi;
+        fi;
+    fi;
+fi;
+
+
+                    
 
 sudo apt-get autoremove -y
 sudo apt-get clean
