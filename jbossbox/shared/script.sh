@@ -18,12 +18,16 @@ sudo apt-get install -y curl;
 sudo apt-get install -y python-pip;
 
 # set script common variables
-HOME='/home/vagrant';
-JAVA_EXIST=false;
+if [ ! $HOME ]; then
+    HOME='/home/vagrant';
+fi;
 ASSETS="$HOME/shared/assets";
 PACS_DIR="$HOME/pacs";
 DCM_ZIP="$ASSETS/dcm4chee-2.18.1-psql.zip";
 JBOSS_ZIP="$ASSETS/jboss-4.2.3.GA.zip";
+
+# set script flags
+JAVA_EXIST=false;
 PACS_DIR_EXIST=false;
 
 # check if java command exists
@@ -60,10 +64,10 @@ else
 fi;
 
 # check if shared assets is properly located
-if [ ! -f $DCM_ZIP ]; then
+if [ ! -f "$DCM_ZIP" ]; then
     echo "dcm4chee 2.18.1 PostgreSQL file not found!";
 fi;
-if [ ! -f $JBOSS_ZIP ]; then
+if [ ! -f "$JBOSS_ZIP" ]; then
     echo "JBOSS 4.2.3 GA file not found!";
 fi;
 
@@ -77,7 +81,7 @@ if [ ! -d "$PACS_DIR" ]; then
 fi;
 
 if [ "$PACS_DIR_EXIST" == 'true' ]; then
-    if ["$JAVA_EXIST" == 'true' ]; then
+    if [ "$JAVA_EXIST" == 'true' ]; then
         # check if dcm4chee is properly located    
         if [ ! -d "$PACS_DIR/dcm4chee-2.18.1-psql" ]; then
             echo "dcm4chee 2.18.1 PostgreSQL not found, fixing it...";
@@ -89,7 +93,11 @@ if [ "$PACS_DIR_EXIST" == 'true' ]; then
             echo "JBOSS 4.2.3 GA not found, fixing it...";
             unzip $JBOSS_ZIP -d $PACS_DIR;
         fi;
+    else
+        echo "could not find java flag!";
     fi;
+else
+    echo "could not find pacs dir flag!";
 fi;
 
 # end of vagrant auto script
