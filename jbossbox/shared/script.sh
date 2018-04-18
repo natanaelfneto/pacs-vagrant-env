@@ -25,7 +25,7 @@ sudo apt-get install -y python-pip;
 if [ ! $HOME ]; then
     HOME='/home/vagrant';
 fi;
-ASSETS="$HOME/shared/assets";
+ASSETS="/vagrant/shared/assets";
 PACS_DIR="$HOME/pacs";
 DCM_ZIP="$ASSETS/dcm4chee-2.18.1-psql.zip";
 JBOSS_ZIP="$ASSETS/jboss-4.2.3.GA.zip";
@@ -91,13 +91,13 @@ if [ ! -d "$PACS_DIR" ]; then
             unzip $JBOSS_ZIP -d $PACS_DIR;
         fi;
     else
-        echo "could not find java flag!";
+        echo "could not find java flag!\n";
     fi;
 else
-    echo "could not find pacs dir flag!";
+    echo "could not find pacs dir flag!\n";
 fi;
 
-apt-get autoremove -y
-apt-get clean
+sudo apt-get autoremove -y
+sudo apt-get clean
 # end of vagrant auto script
 echo 'end of vagrant auto script';
