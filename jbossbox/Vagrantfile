@@ -1,16 +1,18 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-p "Vagrantfile load begin..."
+print "Vagrantfile load begin...\n"
 Vagrant.configure("2") do |config|
 
 	config.vm.box = "ubuntu/xenial64"
-	p "Vagrant base box: " << config.vm.box
+	print "Vagrant base box: " << config.vm.box << "\n"
 
 	# config.ssh.username = "vagrant"
 	# config.ssh.password = "vagrant"
-	# config.ssh.insert_key = false
-	# config.ssh.compression = false
+	config.ssh.insert_key = false
+	config.ssh.compression = false
+
+	config.winssh.shell = "powershell"
 
 	# setting up private ip
 	config.vm.network :private_network, ip: "192.168.68.8" #private IP
