@@ -1,0 +1,43 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+	config.vm.box = "ubuntu/xenial64"
+
+	# Configuration for proxy environment
+	# if Vagrant.has_plugin?("vagrant-proxyconf")
+	# 	config.proxy.http     = "http://huol-vp-proxy-wifi.ebserhnet.ebserh.gov.br:3128"
+	# 	config.proxy.https    = "https://huol-vp-proxy-wifi.ebserhnet.ebserh.gov.br:3128"
+	# 	config.proxy.no_proxy = "localhost,127.0.0.1,10.*"
+	# end
+
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--memory", "512"]
+  end
+
+	config.vm.network :private_network, ip: "192.168.68.8" #private IP
+
+	# forwarding common used ports
+	config.vm.network "forwarded_port", guest: 80, host: 2281, auto_correct: true
+	config.vm.network "forwarded_port", guest: 8000, host: 2282, auto_correct: true
+	
+	#forwarding JBOSS common used ports
+	#config.vm.network "forwarded_port", guest: 9994, host: 19994 # JBOSS Admin Console
+	#config.vm.network "forwarded_port", guest: 8084, host: 18084 # JBOSS Endpoints
+	#config.vm.network "forwarded_port", guest: 10003, host: 10003 # JBOSS Maven Deploy
+	#config.vm.network "forwarded_port", guest: 9443, host: 19443 # WSO2 Console admin/admin
+	#config.vm.network "forwarded_port", guest: 8243, host: 18243 # WSO2 Endpoints
+	#config.vm.network "forwarded_port", guest: 8280, host: 18280 # WSO2 Endpoints
+	#config.vm.network "forwarded_port", guest: 1521, host: 11521 # Oracle XE
+
+	# configure shared folders
+	config.vm.synced_folder "shared/", "/home/vagrant/shared/"
+
+	# try (connection to web){
+	#		config.vm.provision "shell", path: "https://path.to.script.sh"
+	# } catch {
+	#		config.vm.provision "shell", path: File.join(File.expand_path(File.dirname(__FILE__)), "shared/script.sh")
+	# }
+	config.vm.provision "shell", path: File.join(File.expand_path(File.dirname(__FILE__)), "shared/script1.sh")
+	
+end
