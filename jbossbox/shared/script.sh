@@ -162,12 +162,23 @@ if [ -d "$PACS_DIR" ]; then
                         echo "check if postgres password is set..."
                         if [ ! -f "$PACS_DIR/psql_passwd.config" ]; then
                             echo "postgres password is not set, fixing it...";
+                            # change postgres user password
                             echo -e "pgadminpacs\npgadminpacs" | sudo passwd postgres;
-                            sudo su;
-                            su - postgres;
-                            psql -d template1 -c "ALTER USER postgres WITH PASSWORD 'pgadminpacs';";
-                            exit;
-                            # touch "$PACS_DIR/psql_passwd.config";
+                            # change root and postgres users bashrc files
+                            if [ ! -f "/root/sudo_bashrc.conf" ]; then
+                                sudo cp /vagrant/shared/sudo_bashrc.sh /root/.bashrc
+                                if [ ! -f "/usr/lib/postgresql/postgres_bashrc.conf" ]; then
+                                    sudo cp /vagrant/shared/psql_bashrc.sh /usr/lib/postgresql/.bashrc_profile
+                                    # login as root
+                                    sudo su;
+                                    touch "/usr/lib/postgresql/postgres_bashrc.conf"
+                                    echo "...OK";
+                                else echo "...OK";
+                                fi;
+                                touch "/root/sudo_bashrc.conf"
+                            else echo "...OK";
+                            fi;
+                            touch "$PACS_DIR/psql_passwd.config";
                             echo "...OK";
                         else echo "...OK";
                         fi;
