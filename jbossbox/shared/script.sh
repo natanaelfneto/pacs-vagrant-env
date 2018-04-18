@@ -5,7 +5,7 @@ echo 'begin of vagrant auto script';
 
 # updating and upgrading machine
 sudo apt-get update;
-sudo apt-get -y upgrade;
+# sudo apt-get -y upgrade;
 
 # installing debug requirements
 sudo apt-get install -y git;
@@ -13,6 +13,8 @@ sudo apt-get install -y nano;
 sudo apt-get install -y w3m;
 sudo apt-get install -y vim;
 sudo apt-get install -y curl;
+sudo apt-get install -y zip;
+sudo apt-get install -y unzip;
 
 # installing basic jboss requiremnets
 sudo apt-get install -y python-pip;
@@ -26,15 +28,10 @@ PACS_DIR="$HOME/pacs";
 DCM_ZIP="$ASSETS/dcm4chee-2.18.1-psql.zip";
 JBOSS_ZIP="$ASSETS/jboss-4.2.3.GA.zip";
 
-# set script flags
-JAVA_EXIST=false;
-PACS_DIR_EXIST=false;
-
 # check if java command exists
 echo 'check if java command exists...';
 if [ `command -v java` ]; then 
     echo 'java is already installed, skipping...';
-    JAVA_EXIST=true;
 else 
     echo 'java is not yet installed, installing...';
     sudo apt-get purge -y java*;
@@ -57,10 +54,8 @@ fi;
 # re-check java and JAVA_HOME with javac command line
 if [ `command -v javac` ]; then
     javac -version;
-    JAVA_EXIST=true;
 else
-    echo 'something went wrong on java installation or the JAVA_HOME setup...';
-    JAVA_EXIST=false; break; exit;
+    echo 'something went wrong on java installation or the JAVA_HOME setup...'; break; exit;
 fi;
 
 # check if shared assets is properly located
@@ -73,15 +68,14 @@ fi;
 
 # check if PACS folder exists
 if [ ! -d "$PACS_DIR" ]; then
-    mkdir $PACS_DIR; PACS_DIR_EXIST=true;
+    mkdir $PACS_DIR;
 fi;
 if [ ! -d "$PACS_DIR" ]; then
-    $PACS_DIR_EXIST=false;
     echo "something prevent PACS folder from being created"; break; exit;
 fi;
 
-if [ "$PACS_DIR_EXIST" == 'true' ]; then
-    if [ "$JAVA_EXIST" == 'true' ]; then
+if [ ! -d "$PACS_DIR" ]; then
+    if [ `command -v javac` ]; then
         # check if dcm4chee is properly located    
         if [ ! -d "$PACS_DIR/dcm4chee-2.18.1-psql" ]; then
             echo "dcm4chee 2.18.1 PostgreSQL not found, fixing it...";
