@@ -4,17 +4,7 @@
 Vagrant.configure("2") do |config|
 	config.vm.box = "ubuntu/xenial64"
 
-	# Configuration for proxy environment
-	# if Vagrant.has_plugin?("vagrant-proxyconf")
-	# 	config.proxy.http     = "http://huol-vp-proxy-wifi.ebserhnet.ebserh.gov.br:3128"
-	# 	config.proxy.https    = "https://huol-vp-proxy-wifi.ebserhnet.ebserh.gov.br:3128"
-	# 	config.proxy.no_proxy = "localhost,127.0.0.1,10.*"
-	# end
-
-  config.vm.provider :virtualbox do |vb|
-    vb.customize ["modifyvm", :id, "--memory", "512"]
-  end
-
+	# setting up private ip
 	config.vm.network :private_network, ip: "192.168.68.8" #private IP
 
 	# forwarding common used ports
@@ -32,6 +22,8 @@ Vagrant.configure("2") do |config|
 
 	# configure shared folders
 	config.vm.synced_folder "shared/", "/home/vagrant/shared/"
+
+	# getting script to be runned on machine 'up' command
 	config.vm.provision "shell", path: File.join(
 		File.expand_path(File.dirname(__FILE__)),
 		"shared/start_script.sh"

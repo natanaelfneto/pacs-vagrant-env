@@ -2,17 +2,22 @@
 
 # begin of vagrant auto script
 echo 'begin of vagrant auto script';
-# sudo apt-get update && sudo apt-get -y upgrade;
+
+# updating and upgrading machine
+sudo apt-get update;
+sudo apt-get -y upgrade;
 
 # installing debug requirements
 sudo apt-get install -y git;
 sudo apt-get install -y nano;
 sudo apt-get install -y w3m;
 sudo apt-get install -y vim;
+sudo apt-get install -y curl;
 
 # installing basic jboss requiremnets
 sudo apt-get install -y python-pip;
 
+# set script common variables
 HOME='/home/vagrant';
 JAVA_EXIST=false;
 ASSETS="$HOME/shared/assets";
@@ -86,9 +91,6 @@ if [ "$PACS_DIR_EXIST" == 'true' ]; then
         fi;
     fi;
 fi;
-
-cp /home/vagrant/shared/.bashrc /home/vagrant/.bashrc
-source /home/vagrant/.bashrc
 
 # end of vagrant auto script
 echo 'end of vagrant auto script';
