@@ -26,7 +26,7 @@ if [ ! $HOME ]; then
     HOME='/home/vagrant';
 fi;
 ASSETS="/vagrant/shared/assets";
-PACS_DIR="$HOME/pacs";
+PACS_DIR="/vagrant/pacs";
 DCM_ZIP="$ASSETS/dcm4chee-2.18.1-psql.zip";
 JBOSS_ZIP="$ASSETS/jboss-4.2.3.GA.zip";
 
