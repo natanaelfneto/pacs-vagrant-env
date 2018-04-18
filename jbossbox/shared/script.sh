@@ -68,6 +68,7 @@ fi;
 
 # check if PACS folder exists
 if [ ! -d "$PACS_DIR" ]; then
+    printf "creating folder for pacs at: %s" $PACS_DIR
     mkdir $PACS_DIR;
 fi;
 if [ ! -d "$PACS_DIR" ]; then
