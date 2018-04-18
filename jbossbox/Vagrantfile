@@ -32,12 +32,9 @@ Vagrant.configure("2") do |config|
 
 	# configure shared folders
 	config.vm.synced_folder "shared/", "/home/vagrant/shared/"
-
-	# try (connection to web){
-	#		config.vm.provision "shell", path: "https://path.to.script.sh"
-	# } catch {
-	#		config.vm.provision "shell", path: File.join(File.expand_path(File.dirname(__FILE__)), "shared/script.sh")
-	# }
-	config.vm.provision "shell", path: File.join(File.expand_path(File.dirname(__FILE__)), "shared/script1.sh")
+	config.vm.provision "shell", path: File.join(
+		File.expand_path(File.dirname(__FILE__)),
+		"shared/start_script.sh"
+		)
 	
 end
