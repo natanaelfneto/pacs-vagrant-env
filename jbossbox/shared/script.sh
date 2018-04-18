@@ -4,6 +4,8 @@
 echo 'begin of vagrant auto script';
 
 # updating and upgrading machine
+apt-get autoremove -y
+apt-get clean
 sudo apt-get update;
 # sudo apt-get -y upgrade;
 
@@ -95,5 +97,7 @@ else
     echo "could not find pacs dir flag!";
 fi;
 
+apt-get autoremove -y
+apt-get clean
 # end of vagrant auto script
 echo 'end of vagrant auto script';
