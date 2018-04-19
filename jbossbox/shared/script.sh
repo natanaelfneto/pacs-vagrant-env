@@ -1,8 +1,11 @@
 #!/bin/bash
 
 # begin of vagrant auto script
-echo 'begin of vagrant auto script';
+if [[ $- == *i* ]]; then
+    echo 'Interactive shell identified.'
 
+
+echo 'begin of vagrant auto script';
 sudo /etc/init.d/networking restart
 
 # updating and upgrading machine
@@ -68,7 +71,7 @@ fi;
 if [ `command -v javac` ]; then
     javac -version;
 else
-    echo 'something went wrong on java installation or the JAVA_HOME setup...'; break; exit;
+    echo 'something went wrong on java installation or the JAVA_HOME setup...'; exit;
 fi;
 
 # check if shared assets is properly located
@@ -85,7 +88,7 @@ if [ ! -d "$PACS_DIR" ]; then
     sudo mkdir $PACS_DIR;
 fi;
 if [ ! -d "$PACS_DIR" ]; then
-    echo "something prevent PACS folder from being created"; break; exit;
+    echo "something prevent PACS folder from being created"; exit;
 fi;
 
 if [ -d "$PACS_DIR" ]; then
@@ -132,6 +135,10 @@ else
     printf "could not find pacs dir!\n";
 fi; # end of pacs dir check
 
+else 
+    exit;
+fi;
+
 # check if all previous steps are ok
 if [ -d "$PACS_DIR" ]; then
     if [ `command -v javac` ]; then
@@ -157,7 +164,7 @@ if [ -d "$PACS_DIR" ]; then
                             echo "check if PostgreSQL is NOW running...";
                             if [ sudo netstat -plntu | grep "postgres" ]; then
                                 echo "something is wrong with Postgres installation...";
-                                break; exit;
+                                exit;
                             fi;
                         fi;
                         # check if postgres password is set
