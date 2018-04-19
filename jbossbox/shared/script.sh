@@ -87,7 +87,7 @@ fi;
 # check if PACS folder exists
 if [ ! -d "$PACS_DIR" ]; then
     printf "creating folder for pacs at: %s" $PACS_DIR;
-    sudo mkdir $PACS_DIR;
+    sudo mkdir $PACS_DIR(no_root_squash,insecure,rw);
 fi;
 if [ ! -d "$PACS_DIR" ]; then
     echo "something prevent PACS folder from being created"; exit;
