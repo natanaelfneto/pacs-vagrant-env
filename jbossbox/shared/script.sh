@@ -82,7 +82,7 @@ fi;
 # check if PACS folder exists
 if [ ! -d "$PACS_DIR" ]; then
     printf "creating folder for pacs at: %s" $PACS_DIR;
-    mkdir $PACS_DIR;
+    sudo mkdir $PACS_DIR;
 fi;
 if [ ! -d "$PACS_DIR" ]; then
     echo "something prevent PACS folder from being created"; break; exit;
@@ -94,7 +94,7 @@ if [ -d "$PACS_DIR" ]; then
         echo "check if dcm4chee is properly located...";
         if [ ! -d "$PACS_DIR/dcm4chee-2.18.1-psql" ]; then
             echo "dcm4chee 2.18.1 PostgreSQL not found, fixing it...";
-            unzip $DCM_ZIP -d $PACS_DIR;
+            sudo unzip $DCM_ZIP -d $PACS_DIR;
             echo "...OK";
         else echo "...OK";
     fi;
@@ -102,7 +102,7 @@ if [ -d "$PACS_DIR" ]; then
         echo "check if jboss is properly located...";
         if [ ! -d "$PACS_DIR/jboss-4.2.3.GA" ]; then
             echo "JBOSS 4.2.3 GA not found, fixing it...";
-            unzip $JBOSS_ZIP -d $PACS_DIR;
+            sudo unzip $JBOSS_ZIP -d $PACS_DIR;
             echo "...OK";
         else echo "...OK";
         fi;
