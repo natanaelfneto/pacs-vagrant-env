@@ -5,3 +5,4 @@ boxmanage hostonlyif create
 vboxmanage hostonlyif ipconfig --ip 192.168.68.8 vboxnet0
 vagrant global-status
 (cd ./jbossbox/; vagrant up --provision;);
+(cd ./jbossbox/; vagrant ssh);
