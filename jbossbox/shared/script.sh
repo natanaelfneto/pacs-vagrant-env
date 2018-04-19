@@ -3,6 +3,8 @@
 # begin of vagrant auto script
 echo 'begin of vagrant auto script';
 
+sudo /etc/init.d/networking restart
+
 # updating and upgrading machine
 sudo apt-get autoremove -y
 sudo apt-get clean

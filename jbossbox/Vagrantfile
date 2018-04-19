@@ -54,8 +54,8 @@ output = "
 Vagrant base box: " << config.vm.box << "
 Private Network IP Address: 192.168.68.8
 Forwarded Ports: {
-	guest: 80, 		host: 2281, 	auto_correct: true
-	guest: 8000, 	host: 2282, 	auto_correct: true
+	guest: 80,  	host: 2281, 	auto_correct: true
+	guest: 8000,	host: 2282, 	auto_correct: true
 }
 ./shared host folder will be mounted as /vagrant/shared/ on guest
 reset flag is set to: " << (reset ? "true" : "false") << "\n
