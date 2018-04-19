@@ -175,19 +175,19 @@ if [ -d "$PACS_DIR" ]; then
                             echo -e "pgadminpacs\npgadminpacs" | sudo passwd postgres;
                             # change root and postgres users bashrc files
                             if [ ! -f "/root/sudo_bashrc.conf" ]; then
-                                sudo cp /vagrant/shared/sudo_script.sh /root/.bashrc
+                                #sudo cp /vagrant/shared/sudo_script.sh /root/.bashrc
                                 if [ ! -f "/usr/lib/postgresql/postgres_bashrc.conf" ]; then
-                                    sudo cp /vagrant/shared/psql_script.sh /usr/lib/postgresql/.bashrc_profile
+                                    #sudo cp /vagrant/shared/psql_script.sh /usr/lib/postgresql/.bashrc_profile
                                     # login as root
-                                    sudo su;
-                                    sudo touch "/usr/lib/postgresql/postgres_bashrc.conf"
+                                    #sudo su;
+                                    #sudo touch "/usr/lib/postgresql/postgres_bashrc.conf"
                                     echo "...OK";
                                 else echo "...OK";
                                 fi;
-                                sudo touch "/root/sudo_bashrc.conf"
+                                #sudo touch "/root/sudo_bashrc.conf"
                             else echo "...OK";
                             fi;
-                            sudo touch "$PACS_DIR/psql_passwd.config";
+                            #sudo touch "$PACS_DIR/psql_passwd.config";
                             echo "...OK";
                         else echo "...OK";
                         fi;
