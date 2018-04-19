@@ -5,10 +5,14 @@ print "Vagrantfile load begin...\n"
 Vagrant.configure("2") do |config|
 
 	config.vm.box = "ubuntu/xenial64"
-	print "Vagrant base box: " << config.vm.box << "\n"
+
+	# reset var: if true, all flags, files and content will be erased on vagrant boot
+	reset = false;
 
 	# config.ssh.username = "vagrant"
 	# config.ssh.password = "vagrant"
+
+	# configurations for windows access, *nix users can ignore it
 	config.ssh.insert_key = false
 	config.ssh.compression = false
 	config.winssh.shell = "powershell"
@@ -33,11 +37,29 @@ Vagrant.configure("2") do |config|
 	config.vm.synced_folder "shared/", "/vagrant/shared/"
 
 	# getting script to be runned on machine 'up' command
-	config.vm.provision "shell", path: File.join(
-		File.expand_path(File.dirname(__FILE__)),
-		"shared/start_script.sh"
-		)
+	if reset == true
+		config.vm.provision "shell", path: File.join(
+			File.expand_path(File.dirname(__FILE__)),
+			"shared/reset_script.sh"
+			)
+	else
+		config.vm.provision "shell", path: File.join(
+			File.expand_path(File.dirname(__FILE__)),
+			"shared/start_script.sh"
+			)
+	end
 
-	#vagrant ALL=(ALL) NOPASSWD: ALL
+	# Vagrantfile output
+	print "
+		Vagrant base box: " << config.vm.box << "\n
+		Private Network IP Address: 192.168.68.8
+		Forwarded Ports: {
+			guest: 80, host: 2281, auto_correct: true
+			guest: 8000, host: 2282, auto_correct: true
+		}
+		./shared host folder will be mounted as /vagrant/shared/ on guest
+		reset flag is set to: " << reset << "\n"
+
+	# end of vagrant file
 	print "Vagrantfile loaded\n"
 end

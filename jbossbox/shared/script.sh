@@ -95,7 +95,7 @@ if [ -d "$PACS_DIR" ]; then
             unzip $DCM_ZIP -d $PACS_DIR;
             echo "...OK";
         else echo "...OK";
-        fi;
+    fi;
         # check if jboss is properly located
         echo "check if jboss is properly located...";
         if [ ! -d "$PACS_DIR/jboss-4.2.3.GA" ]; then
@@ -139,7 +139,7 @@ if [ -d "$PACS_DIR" ]; then
                     if [ -f "$PACS_DIR/jboss-4.2.3.GA/jboss_install.config" ]; then
                         # check if PostgreSQL is running
                         echo "check if PostgreSQL is running...";
-                        if [ sudo netstat -plntu | grep "postgres" ]; then
+                        if [ netstat -plntu | grep "postgres" ]; then
                             echo "PostgreSQL is runnig normally";
                         else
                             echo "installing PostgreSQL...";
@@ -166,48 +166,36 @@ if [ -d "$PACS_DIR" ]; then
                             echo -e "pgadminpacs\npgadminpacs" | sudo passwd postgres;
                             # change root and postgres users bashrc files
                             if [ ! -f "/root/sudo_bashrc.conf" ]; then
-                                sudo cp /vagrant/shared/sudo_bashrc.sh /root/.bashrc
+                                sudo cp /vagrant/shared/sudo_script.sh /root/.bashrc
                                 if [ ! -f "/usr/lib/postgresql/postgres_bashrc.conf" ]; then
-                                    sudo cp /vagrant/shared/psql_bashrc.sh /usr/lib/postgresql/.bashrc_profile
+                                    sudo cp /vagrant/shared/psql_script.sh /usr/lib/postgresql/.bashrc_profile
                                     # login as root
                                     sudo su;
-                                    touch "/usr/lib/postgresql/postgres_bashrc.conf"
+                                    sudo touch "/usr/lib/postgresql/postgres_bashrc.conf"
                                     echo "...OK";
                                 else echo "...OK";
                                 fi;
-                                touch "/root/sudo_bashrc.conf"
+                                sudo touch "/root/sudo_bashrc.conf"
                             else echo "...OK";
                             fi;
-                            touch "$PACS_DIR/psql_passwd.config";
+                            sudo touch "$PACS_DIR/psql_passwd.config";
                             echo "...OK";
                         else echo "...OK";
                         fi;
-                        # check if postgres password is set
-                        echo "check if postgres password is set..."
-                        if [ ! -f "$PACS_DIR/dcm_psql.config" ]; then
-                            
-                            touch "$PACS_DIR/dcm_psql.config";
-                            echo "...OK";
-                            else echo "...OK";
-                        fi;
-                        echo "...a";
+                    else echo "re-check: jboss installation script problem found";
                     fi;
-                    echo "...b";
+                else echo "recheck: libclib.jii.so file problem found";
                 fi;
-                echo "...c";
+            else echo "re-check: jboss dir problem found";
             fi;
-            echo "...d";
+        else echo "re-check: dcm4chee dir problem found";
         fi;
-        echo "...e";
+    else echo "re-check: java installation problem found";
     fi;
-    echo "...f";
+else echo "re-check: pacs dir problem found";
 fi;
-echo "...g";
 
-
-                    
-
-sudo apt-get autoremove -y
-sudo apt-get clean
+sudo apt-get autoremove -y;
+sudo apt-get clean;
 # end of vagrant auto script
 echo 'end of vagrant auto script';
